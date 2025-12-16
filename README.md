@@ -30,14 +30,15 @@ Sigue estos pasos en orden; copia/pega los comandos tal cual. Si algo falla, cop
    - Duplica el archivo de ejemplo: `cp .env.example .env`
    - Abre `.env` y reemplaza los valores en mayúsculas:
      - `NEXTAUTH_SECRET`: cualquier texto largo y único (p. ej. generado con https://generate-secret.vercel.app/32)
-     - `TRAINER_EMAIL` y `TRAINER_PASSWORD`: serán las credenciales iniciales de la entrenadora
-     - `DATABASE_URL`: si usarás Docker, déjalo como está; si tienes Postgres propio, pon tu conexión.
+     - `TRAINER_BOOTSTRAP_EMAIL` y `TRAINER_BOOTSTRAP_PASSWORD`: serán las credenciales iniciales de la entrenadora
+     - `DATABASE_URL`: **imprescindible** antes de correr Prisma (`prisma generate/migrate`). Si usas Docker, déjalo como está; si tienes Postgres propio, pon tu conexión.
      - `S3_ENDPOINT`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET`: si no tienes S3 aún, puedes dejar valores de prueba.
 
 2. **Instala dependencias**
    ```bash
    npm install
    ```
+   - Incluye Prisma ya en la versión correcta (6.x) para que `npx prisma ...` no pida instalar nada extra.
    - Puedes ejecutar este comando desde la terminal integrada de VS Code. Si ves advertencias (`npm warn`), son mensajes informativos y normalmente puedes seguir al siguiente paso.
 
 3. **Prepara la base de datos**
