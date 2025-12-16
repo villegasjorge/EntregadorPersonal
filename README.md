@@ -6,6 +6,17 @@ Aplicación **mobile-first** para entrenadoras y clientes con flujos rápidos de
 - Node 18+
 - Docker / Docker Compose
 - PostgreSQL
+- Git instalado
+- Editor recomendado: **Visual Studio Code** (VS Code)
+
+## Antes de empezar (clona y abre el proyecto)
+1. Instala Git si no lo tienes (https://git-scm.com/downloads) y VS Code (https://code.visualstudio.com/).
+2. Abre una terminal (puede ser la integrada de VS Code) y clona el repositorio:
+   ```bash
+   git clone <URL_DEL_REPO>
+   cd EntregadorPersonal
+   ```
+3. Abre la carpeta en VS Code para ver los archivos y seguir los pasos siguientes.
 
 ## Setup local (guía para no técnicos)
 Sigue estos pasos en orden; copia/pega los comandos tal cual. Si algo falla, copia el mensaje y vuelve a pedir ayuda.
