@@ -3,20 +3,25 @@
 Aplicación **mobile-first** para entrenadoras y clientes con flujos rápidos de entrenamiento, pagos, progreso y comunicación. Construida con Next.js (App Router), Tailwind + shadcn-style UI y PostgreSQL/Prisma.
 
 ## Requisitos
-- Node 18+
+- **Node 18+** (si no quieres instalarlo, usa la opción Docker más abajo)
 - Docker / Docker Compose
 - PostgreSQL
 - Git instalado
 - Editor recomendado: **Visual Studio Code** (VS Code)
 
+> Si aún no tienes Node o Docker, instálalos primero:
+> - Node: https://nodejs.org/en/download (elige la opción LTS)
+> - Docker Desktop: https://www.docker.com/products/docker-desktop/
+
 ## Antes de empezar (clona y abre el proyecto)
 1. Instala Git si no lo tienes (https://git-scm.com/downloads) y VS Code (https://code.visualstudio.com/).
-2. Abre una terminal (puede ser la integrada de VS Code) y clona el repositorio:
+2. Abre una terminal (puede ser la integrada de VS Code: `Ctrl + `` o menú **Terminal → New Terminal**).
+3. Clona el repositorio y entra en la carpeta:
    ```bash
    git clone <URL_DEL_REPO>
    cd EntregadorPersonal
    ```
-3. Abre la carpeta en VS Code para ver los archivos y seguir los pasos siguientes.
+4. Abre la carpeta en VS Code (**File → Open Folder**), así tendrás el editor y la terminal listos en un mismo lugar.
 
 ## Setup local (guía para no técnicos)
 Sigue estos pasos en orden; copia/pega los comandos tal cual. Si algo falla, copia el mensaje y vuelve a pedir ayuda.
@@ -33,6 +38,7 @@ Sigue estos pasos en orden; copia/pega los comandos tal cual. Si algo falla, cop
    ```bash
    npm install
    ```
+   - Puedes ejecutar este comando desde la terminal integrada de VS Code. Si ves advertencias (`npm warn`), son mensajes informativos y normalmente puedes seguir al siguiente paso.
 
 3. **Prepara la base de datos**
    - Genera el cliente Prisma y crea tablas:
