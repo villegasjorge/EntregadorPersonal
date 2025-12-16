@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  TRAINER
+  CLIENT
+}
+
+enum InvoiceStatus {
+  up_to_date
+  due_soon
+  overdue
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  ABSENT
+}
+
+enum PaymentMethod {
+  cash
+  transfer
+  card
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  password     String
+  role         Role
+  trainerId    Int?
+  trainer      User?     @relation("TrainerClients", fields: [trainerId], references: [id])
+  clients      User[]    @relation("TrainerClients")
+  measurements Measurement[]
+  progressPhotos ProgressPhoto[]
+  messages     Message[]
+  workoutSessions WorkoutSession[]
+  exerciseSets ExerciseSet[]
+  invoices     Invoice[]
+  payments     Payment[]
+  attendance   Attendance[]
+  subscriptions Subscription[]
+}
+
+model Exercise {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  muscleGroup String
+  createdById Int?
+  createdBy   User?  @relation(fields: [createdById], references: [id])
+}
+
+model ProgramTemplate {
+  id          Int               @id @default(autoincrement())
+  name        String
+  goal        String
+  createdById Int?
+  createdBy   User?             @relation(fields: [createdById], references: [id])
+  versions    ProgramVersion[]
+}
+
+model ProgramVersion {
+  id               Int      @id @default(autoincrement())
+  templateId       Int
+  versionNumber    Int
+  name             String
+  description      String
+  effectiveFrom    DateTime
+  template         ProgramTemplate @relation(fields: [templateId], references: [id])
+  assignedSessions WorkoutSession[]
+}
+
+model WorkoutSession {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  trainerId    Int?
+  date         DateTime
+  planVersionId Int?
+  completed    Boolean  @default(false)
+  notes        String?
+  user         User     @relation(fields: [userId], references: [id])
+  trainer      User?    @relation("TrainerSession", fields: [trainerId], references: [id])
+  planVersion  ProgramVersion? @relation(fields: [planVersionId], references: [id])
+  exerciseSets ExerciseSet[]
+}
+
+model ExerciseSet {
+  id        Int      @id @default(autoincrement())
+  sessionId Int
+  userId    Int
+  exercise  String
+  reps      Int
+  weight    Float?
+  rpe       Float?
+  pain      Int?
+  notes     String?
+  session   WorkoutSession @relation(fields: [sessionId], references: [id])
+  user      User           @relation(fields: [userId], references: [id])
+}
+
+model Measurement {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  weightKg   Float
+  bodyFatPct Float?
+  recordedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model ProgressPhoto {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  url        String
+  caption    String?
+  capturedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  senderRole Role
+  content   String
+  attachmentUrl String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model MembershipPlan {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Int
+  cadence   String
+  createdById Int?
+  createdBy User? @relation(fields: [createdById], references: [id])
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  planId    Int
+  startDate DateTime
+  endDate   DateTime?
+  user      User @relation(fields: [userId], references: [id])
+  plan      MembershipPlan @relation(fields: [planId], references: [id])
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  amount    Int
+  dueDate   DateTime
+  status    InvoiceStatus @default(up_to_date)
+  user      User          @relation(fields: [userId], references: [id])
+  payments  Payment[]
+}
+
+model Payment {
+  id         Int      @id @default(autoincrement())
+  invoiceId  Int
+  userId     Int
+  amount     Int
+  method     PaymentMethod
+  paidAt     DateTime @default(now())
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  auditLogs  AuditLog[]
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  paymentId  Int
+  message    String
+  createdAt  DateTime @default(now())
+  payment    Payment  @relation(fields: [paymentId], references: [id])
+}
+
+model Attendance {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  trainerId Int
+  date      DateTime
+  status    AttendanceStatus
+  user      User @relation(fields: [userId], references: [id])
+  trainer   User @relation("TrainerAttendance", fields: [trainerId], references: [id])
+}
