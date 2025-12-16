@@ -39,15 +39,20 @@ model User {
   trainerId    Int?
   trainer      User?     @relation("TrainerClients", fields: [trainerId], references: [id])
   clients      User[]    @relation("TrainerClients")
+  createdExercises Exercise[] @relation("ExerciseCreatedBy")
+  createdProgramTemplates ProgramTemplate[] @relation("ProgramTemplateCreatedBy")
   measurements Measurement[]
   progressPhotos ProgressPhoto[]
   messages     Message[]
   workoutSessions WorkoutSession[]
+  trainerSessions WorkoutSession[] @relation("TrainerSession")
   exerciseSets ExerciseSet[]
   invoices     Invoice[]
   payments     Payment[]
   attendance   Attendance[]
+  trainerAttendance Attendance[] @relation("TrainerAttendance")
   subscriptions Subscription[]
+  createdMembershipPlans MembershipPlan[] @relation("MembershipPlanCreatedBy")
 }
 
 model Exercise {
@@ -56,7 +61,7 @@ model Exercise {
   description String
   muscleGroup String
   createdById Int?
-  createdBy   User?  @relation(fields: [createdById], references: [id])
+  createdBy   User?  @relation("ExerciseCreatedBy", fields: [createdById], references: [id])
 }
 
 model ProgramTemplate {
@@ -64,7 +69,7 @@ model ProgramTemplate {
   name        String
   goal        String
   createdById Int?
-  createdBy   User?             @relation(fields: [createdById], references: [id])
+  createdBy   User?             @relation("ProgramTemplateCreatedBy", fields: [createdById], references: [id])
   versions    ProgramVersion[]
 }
 
@@ -141,7 +146,7 @@ model MembershipPlan {
   price     Int
   cadence   String
   createdById Int?
-  createdBy User? @relation(fields: [createdById], references: [id])
+  createdBy User? @relation("MembershipPlanCreatedBy", fields: [createdById], references: [id])
   subscriptions Subscription[]
 }
 
